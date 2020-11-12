@@ -36,7 +36,12 @@ class WebhooksController
         }
 
         $job = new $jobClass($payload);
-        dispatch($job);
+        $isAsync = config("appstore-server-notifications.async", true);
+        if ($isAsync) {
+            dispatch($job);
+        } else {
+            dispatch_now($job);
+        }
 
         return response()->json();
     }

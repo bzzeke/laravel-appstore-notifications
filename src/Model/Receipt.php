@@ -4,6 +4,8 @@ namespace Appvise\AppStoreNotifications\Model;
 
 class Receipt
 {
+    private $receiptInfo;
+
     private $originalTransactionId;
     private $webOrderLineItemId;
     private $productId;
@@ -72,6 +74,7 @@ class Receipt
         $instance->transactionId = $receiptInfo['transaction_id'] ?? null;
         $instance->bvrs = $receiptInfo['bvrs'] ?? null;
         $instance->bid = $receiptInfo['bid'] ?? null;
+        $instance->receiptInfo = $receiptInfo;
 
         return $instance;
     }
@@ -314,5 +317,13 @@ class Receipt
     public function getPromotionalOfferId()
     {
         return $this->promotionalOfferId;
+    }
+
+    /**
+     * Get the original recept, encoded to JSON
+     */
+    public function getJSON()
+    {
+        return json_encode($this->receiptInfo);
     }
 }

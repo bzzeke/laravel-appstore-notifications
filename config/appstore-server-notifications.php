@@ -23,4 +23,9 @@ return [
         // 'did_change_renewal_pref' => \App\Jobs\AppstoreNotifications\HandleDidChangeRenewalPreferences::class,
         // 'did_change_renewal_status' => \App\Jobs\AppstoreNotifications\HandleDidChangeRenewalStatus::class,
     ],
+
+    /*
+     * Put job to queue if true of run immediately
+     */
+    'async' => true
 ];

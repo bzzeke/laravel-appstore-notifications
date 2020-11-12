@@ -31,8 +31,6 @@ class AppleNotification extends Model
      */
     public static function getOriginalTransactionId(array $payload): string
     {
-        $receiptKey = !(isset($payload['latest_receipt_info'])) ? 'latest_expired_receipt_info' : 'latest_receipt_info';
-
-        return $payload[$receiptKey]['original_transaction_id'];
+        return $payload['unified_receipt']['latest_receipt_info']['original_transaction_id'];
     }
 }
