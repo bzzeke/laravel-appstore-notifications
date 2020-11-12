@@ -38,7 +38,7 @@ class NotificationPayload
         $instance->webOrderLineItemId = $request->input('web_order_line_item_id');
 
         $instance->latestReceipt = $request->input('unified_receipt.latest_receipt');
-        $instance->latestReceiptInfo = Receipt::createFromArray($request->input('unified_receipt.latest_receipt_info'));
+        $instance->latestReceiptInfo = Receipt::createFromArray($request->input('unified_receipt.latest_receipt_info.0'));
 
         $instance->autoRenewStatus = $request->input('auto_renew_status');
         $instance->autoRenewProductId = $request->input('auto_renew_product_id');
