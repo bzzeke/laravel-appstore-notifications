@@ -4,7 +4,7 @@ namespace Appvise\AppStoreNotifications;
 
 use Illuminate\Support\Facades\Http;
 use Appvise\AppStoreNotifications\Exceptions\ReceiptVerificationFailed;
-use Appvise\AppStoreNotifications\Models\Receipt;
+use Appvise\AppStoreNotifications\Model\Receipt;
 
 class ReceiptHandler
 {
