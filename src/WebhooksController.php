@@ -2,12 +2,12 @@
 
 namespace Appvise\AppStoreNotifications;
 
+use Appvise\AppStoreNotifications\Exceptions\ReceiptVerificationFailed;
 use Illuminate\Http\Request;
 use Appvise\AppStoreNotifications\Model\NotificationType;
 use Appvise\AppStoreNotifications\Model\AppleNotification;
 use Appvise\AppStoreNotifications\Exceptions\WebhookFailed;
 use Appvise\AppStoreNotifications\Model\NotificationPayload;
-use Illuminate\Support\Facades\Http;
 
 class WebhooksController
 {
@@ -33,8 +33,8 @@ class WebhooksController
         AppleNotification::storeNotification($jobConfigKey, $request->input());
 
         try {
-            $this->verifyReceipt($request);
-        } catch (WebhookFailed $e) {
+            ReceiptHandler::verify($request['unified_receipt']['latest_receipt']);
+        } catch (ReceiptVerificationFailed $e) {
             throw new \RuntimeException($e->getMessage());
         }
 
@@ -68,30 +68,6 @@ class WebhooksController
             $bundleId !== config('appstore-server-notifications.bundle_id')
         ) {
             throw WebhookFailed::nonValidRequest();
-        }
-
-        return true;
-    }
-
-    private function verifyReceipt($receipt): bool
-    {
-        $postData = [
-            'receipt-data' => $receipt['unified_receipt']['latest_receipt'],
-            'password' => config('appstore-server-notifications.shared_secret'),
-        ];
-
-        $response = Http::post(static::PRODUCTION_VERIFY_URL, $postData);
-        $json = $response->json();
-
-        if (!empty($json['status'])) {
-            if ($json['status'] == static::STATUS_IS_SANDBOX) {
-                $response = Http::post(static::SANDBOX_VERIFY_URL, $postData);
-                $json = $response->json();
-            }
-        }
-
-        if (!empty($json['status'])) {
-            throw WebhookFailed::nonValidReceipt($json['status']);
         }
 
         return true;
