@@ -19,6 +19,7 @@ class ReceiptHandler
     {
         $postData = [
             'receipt-data' => $id,
+            'exclude-old-transactions' => true,
             'password' => config('appstore-server-notifications.shared_secret'),
         ];
 
@@ -36,6 +37,6 @@ class ReceiptHandler
             throw ReceiptVerificationFailed::nonValidReceipt($json['status']);
         }
 
-        return Receipt::createFromArray($json['latest_receipt_info']);
+        return Receipt::createFromArray($json['latest_receipt_info'][0]);
     }
 }
